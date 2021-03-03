@@ -5,8 +5,20 @@ const router = express.Router();
 
 // ================ VACCINE TYPE ===============>> GET:ALL
 router.get('/vaccines', async (req, res) => {
-    const { rows } = await db.query('SELECT * FROM vaccine')
-    res.send(rows)
+
+    const selectVaccines = 
+            `
+            SELECT vt.name, v.name as vaccineName, description, benefits, challenges, nr_doses_required
+            FROM vaccine_type as vt
+            LEFT JOIN vaccine as v
+            ON vt.id=v.vaccine_type_id
+            `
+    try {
+        const { rows } = await db.query(selectVaccines)
+        res.json(rows)
+    } catch (e) {
+        res.status(404).send("Vaccines not found")
+    }
 })
 
 // ================ VACCINE TYPE ===============>> GET:ID
