@@ -4,25 +4,25 @@ const db = require('../db')
 const router = express.Router();
 
 // ================ VACCINE TYPE ===============>> GET:ALL
-router.get('/vaccines', async (req, res) => {
+router.get('/vaccine_types', async (req, res) => {
 
     const selectVaccines = 
             `
             SELECT vt.name, v.name as vaccineName, description, benefits, challenges, nr_doses_required
             FROM vaccine_type as vt
-            LEFT JOIN vaccine as v
+            JOIN vaccine as v
             ON vt.id=v.vaccine_type_id
             `
     try {
         const { rows } = await db.query(selectVaccines)
         res.json(rows)
     } catch (e) {
-        res.status(404).send("Vaccines not found")
+        res.status(404).send(`${e} Vaccines not found`)
     }
 })
 
 // ================ VACCINE TYPE ===============>> GET:ID
-router.get('/vaccines/:id', async (req, res) => {
+router.get('/vaccine_types/:id', async (req, res) => {
     const {id} = req.params
     const selectVaccine = {
         text: `
@@ -44,3 +44,13 @@ router.get('/vaccines/:id', async (req, res) => {
 })
 
 module.exports = router
+
+
+// SELECT DISTINCT ON (vt.name)
+//  vt.name, v.name AS vaccineNames, description, benefits, challenges, nr_doses_required
+// FROM vaccine_type as vt
+// JOIN vaccine as v
+// ON vt.id=v.vaccine_type_id
+// GROUP BY vt.name, v.name
+
+// //
