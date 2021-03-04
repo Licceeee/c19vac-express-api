@@ -27,25 +27,39 @@ router.get('/vaccine_types', async (req, res) => {
 // ============================= VACCINE TYPE ========================>> GET:ID
 router.get('/vaccine_types/:id', async (req, res) => {
     const {id} = req.params
-    const selectVaccine = {
+
+    const getVaccineType = {
         text: `
-            SELECT vt.id as id, vt.name, v.name as vaccineName, 
-                    v.id as vaccineID, description, benefits, 
-                    challenges, nr_doses_required as numberofdosesrequired
-            FROM vaccine_type as vt
-            LEFT JOIN vaccine as v
-            ON vt.id=v.vaccine_type_id
-            WHERE vt.id = $1;
-         `,
-        values: [id]}
+            SELECT *, nr_doses_required as numberofdosesrequired
+            FROM vaccine_type WHERE id=$1`
+            ,
+        values: [id]
+    }
+
+    const getVaccines = {
+        text: "SELECT * FROM vaccine WHERE vaccine_type_id=$1",
+        values: [id]
+    }
 
     try {
-        const { rows } = await db.query(selectVaccine)
-        res.send(rows)
-    } catch (e) {
-        res.status(404).send("Vaccine type not found")
-    }
+        const { rows: vaccineTypeRows } = await db.query(getVaccineType)
+ 
+         if (!vaccineTypeRows.length) {
+             return res.sendStatus(404)
+         }
+ 
+        const { rows: vaccineRows } = await db.query(getVaccines)
+ 
+        res.json({
+            vaccineType: vaccineTypeRows[0],
+            relatedVaccines: vaccineRows
+        })
+     } catch (e) {
+         res.status(500).send(e.message)
+     }
+
 })
+
 
 module.exports = router
 
@@ -67,3 +81,26 @@ module.exports = router
 //   ) vaccine_type
 // JOIN vaccine
 // ON vaccine_type.id=vaccine.vaccine_type_id
+
+
+
+// const selectVaccine = {
+//     text: `
+//         SELECT vt.id as id, vt.name, v.name as vaccineName, 
+//                 v.id as vaccineID, description, benefits, 
+//                 challenges, nr_doses_required as numberofdosesrequired
+//         FROM vaccine_type as vt
+//         LEFT JOIN vaccine as v
+//         ON vt.id=v.vaccine_type_id
+//         WHERE vt.id = $1;
+//      `,
+//     values: [id]}
+
+
+
+    // try {
+    //     const { rows } = await db.query(selectVaccine)
+    //     res.send(rows)
+    // } catch (e) {
+    //     res.status(404).send("Vaccine type not found")
+    // }
