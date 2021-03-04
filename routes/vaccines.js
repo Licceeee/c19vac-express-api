@@ -3,13 +3,14 @@ const db = require('../db')
 
 const router = express.Router();
 
-// ================ VACCINE TYPE ===============>> GET:ALL
+// ============================= VACCINE TYPE =======================>> GET:ALL
 router.get('/vaccine_types', async (req, res) => {
 
     const selectVaccines = 
             `
-            SELECT vt.id as id, vt.name as name, COUNT(v.id) as vaccines, description, benefits,
-                    challenges, nr_doses_required as numberOfDosesRequired
+            SELECT vt.id as id, vt.name as name, COUNT(v.id) as vaccines,
+                    description, benefits,
+                    challenges, nr_doses_required as numberofdosesrequired
             FROM vaccine_type as vt
             JOIN vaccine as v
             ON vt.id=v.vaccine_type_id
@@ -23,14 +24,14 @@ router.get('/vaccine_types', async (req, res) => {
     }
 })
 
-// ================ VACCINE TYPE ===============>> GET:ID
+// ============================= VACCINE TYPE ========================>> GET:ID
 router.get('/vaccine_types/:id', async (req, res) => {
     const {id} = req.params
     const selectVaccine = {
         text: `
-            SELECT vt.id as vaccineTypeId, vt.name, v.name as vaccineName, 
+            SELECT vt.id as id, vt.name, v.name as vaccineName, 
                     v.id as vaccineID, description, benefits, 
-                    challenges, nr_doses_required
+                    challenges, nr_doses_required as numberofdosesrequired
             FROM vaccine_type as vt
             LEFT JOIN vaccine as v
             ON vt.id=v.vaccine_type_id
