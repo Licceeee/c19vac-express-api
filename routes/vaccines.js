@@ -8,10 +8,12 @@ router.get('/vaccine_types', async (req, res) => {
 
     const selectVaccines = 
             `
-            SELECT vt.name, v.name as vaccineName, description, benefits, challenges, nr_doses_required
+            SELECT vt.id as id, vt.name as name, COUNT(v.id) as vaccines, description, benefits,
+                    challenges, nr_doses_required as numberOfDosesRequired
             FROM vaccine_type as vt
             JOIN vaccine as v
             ON vt.id=v.vaccine_type_id
+            GROUP BY vt.id
             `
     try {
         const { rows } = await db.query(selectVaccines)
@@ -26,7 +28,9 @@ router.get('/vaccine_types/:id', async (req, res) => {
     const {id} = req.params
     const selectVaccine = {
         text: `
-            SELECT vt.name, v.name as vaccineName, description, benefits, challenges, nr_doses_required
+            SELECT vt.id as vaccineTypeId, vt.name, v.name as vaccineName, 
+                    v.id as vaccineID, description, benefits, 
+                    challenges, nr_doses_required
             FROM vaccine_type as vt
             LEFT JOIN vaccine as v
             ON vt.id=v.vaccine_type_id
@@ -36,10 +40,9 @@ router.get('/vaccine_types/:id', async (req, res) => {
 
     try {
         const { rows } = await db.query(selectVaccine)
-        console.log("in try ")
         res.send(rows)
     } catch (e) {
-        res.status(404).send("Vaccine not found")
+        res.status(404).send("Vaccine type not found")
     }
 })
 
@@ -54,3 +57,12 @@ module.exports = router
 // GROUP BY vt.name, v.name
 
 // //
+
+
+// SELECT vaccine_type.name as VCNAME, description, benefits, challenges, nr_doses_required
+// FROM 
+//   (
+//      SELECT vaccine.name FROM vaccine GROUP BY vaccine.name 
+//   ) vaccine_type
+// JOIN vaccine
+// ON vaccine_type.id=vaccine.vaccine_type_id

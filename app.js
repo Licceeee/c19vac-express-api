@@ -1,9 +1,11 @@
 const express = require('express')
 const app = express();
+const cors = require('cors');
 
 const port = process.env.PORT || 9000;
 
 app.use(express.json())
+app.use(cors());
 
 const vaccines = require('./routes/vaccines')
 
