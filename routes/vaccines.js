@@ -41,6 +41,11 @@ router.get('/vaccine_types/:id', async (req, res) => {
         values: [id]
     }
 
+    const getOtherUses = {
+        text: "SELECT * FROM other_uses WHERE vaccine_type_id=$1",
+        values: [id]
+    }
+
     try {
         const { rows: vaccineTypeRows } = await db.query(getVaccineType)
  
@@ -49,10 +54,12 @@ router.get('/vaccine_types/:id', async (req, res) => {
          }
  
         const { rows: vaccineRows } = await db.query(getVaccines)
+        const { rows: otherUsesRows } = await db.query(getOtherUses)
  
         res.json({
             vaccineType: vaccineTypeRows[0],
-            relatedVaccines: vaccineRows
+            relatedVaccines: vaccineRows,
+            otherUses: otherUsesRows
         })
      } catch (e) {
          res.status(500).send(e.message)
