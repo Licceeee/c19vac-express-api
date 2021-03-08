@@ -41,6 +41,11 @@ router.get('/vaccine_types/:id', async (req, res) => {
         values: [id]
     }
 
+    const getOtherUses = {
+        text: "SELECT * FROM other_uses WHERE vaccine_type_id=$1",
+        values: [id]
+    }
+
     try {
         const { rows: vaccineTypeRows } = await db.query(getVaccineType)
  
@@ -49,10 +54,12 @@ router.get('/vaccine_types/:id', async (req, res) => {
          }
  
         const { rows: vaccineRows } = await db.query(getVaccines)
+        const { rows: otherUsesRows } = await db.query(getOtherUses)
  
         res.json({
             vaccineType: vaccineTypeRows[0],
-            relatedVaccines: vaccineRows
+            relatedVaccines: vaccineRows,
+            otherUses: otherUsesRows
         })
      } catch (e) {
          res.status(500).send(e.message)
@@ -62,45 +69,3 @@ router.get('/vaccine_types/:id', async (req, res) => {
 
 
 module.exports = router
-
-
-// SELECT DISTINCT ON (vt.name)
-//  vt.name, v.name AS vaccineNames, description, benefits, challenges, nr_doses_required
-// FROM vaccine_type as vt
-// JOIN vaccine as v
-// ON vt.id=v.vaccine_type_id
-// GROUP BY vt.name, v.name
-
-// //
-
-
-// SELECT vaccine_type.name as VCNAME, description, benefits, challenges, nr_doses_required
-// FROM 
-//   (
-//      SELECT vaccine.name FROM vaccine GROUP BY vaccine.name 
-//   ) vaccine_type
-// JOIN vaccine
-// ON vaccine_type.id=vaccine.vaccine_type_id
-
-
-
-// const selectVaccine = {
-//     text: `
-//         SELECT vt.id as id, vt.name, v.name as vaccineName, 
-//                 v.id as vaccineID, description, benefits, 
-//                 challenges, nr_doses_required as numberofdosesrequired
-//         FROM vaccine_type as vt
-//         LEFT JOIN vaccine as v
-//         ON vt.id=v.vaccine_type_id
-//         WHERE vt.id = $1;
-//      `,
-//     values: [id]}
-
-
-
-    // try {
-    //     const { rows } = await db.query(selectVaccine)
-    //     res.send(rows)
-    // } catch (e) {
-    //     res.status(404).send("Vaccine type not found")
-    // }
