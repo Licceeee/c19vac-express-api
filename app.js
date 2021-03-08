@@ -6,6 +6,8 @@ const port = process.env.PORT || 8050;
 
 app.use(express.json())
 app.use(cors());
+app.use('/static', express.static(__dirname + '/public'));
+
 
 const vaccines = require('./routes/vaccines')
 
