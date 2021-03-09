@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link href="/style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <title>c19vac API</title>
+</head>
+
+
+<body class="d-flex">
+    <div class="container">
+
+
+        <h1 class="py-5 ">
+            <%= title %>
+
+        </h1>
+
+        <h2 class="py-3">Endpoints</h2>
+        <div class="p-1">
+            <h5 class="py-2"><span class="request">GET</span> Default</h5>
+            <code>https://obscure-wildwood-82348.herokuapp.com/api/v1/vaccine_types</code>
+            <p class="pt-2">List all vaccine types available</p>
+            <p>Fields</p>
+            <ul>
+                <li>
+                    <code>id</code>: integer
+                    <p>unique identifier</p>
+                </li>
+                <li>
+                    <code>name</code>: string
+                    <p>name of vaccine type</p>
+                </li>
+                <li>
+                    <code>vaccines</code>: integer
+                    <p>name of vaccine type</p>
+                </li>
+                <li>
+                    <code>description</code>: text
+                    <p>description of vaccine type</p>
+                </li>
+                <li>
+                    <code>benefits</code>: text
+                    <p>knows positive effects</p>
+                </li>
+                <li>
+                    <code>challanges</code>: text
+                    <p>knows downsides</p>
+                </li>
+                <li>
+                    <code>numberofdosesrequired</code>: integer
+                    <p>number of requiret shots for vaccine to be effective</p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="p-1">
+            <h5 class="py-2"><span class="request">GET</span> Specific vaccine type</h5>
+            <code>https://obscure-wildwood-82348.herokuapp.com/api/v1/vaccine_types/{:id}</code>
+            <p class="pt-2">Display one specific vaccine type</p>
+            <p>Fields</p>
+            <ul>
+                <li>
+                    <code>id</code>: integer
+                    <p>unique identifier</p>
+                </li>
+                <li>
+                    <code>name</code>: string
+                    <p>name of vaccine type</p>
+                </li>
+                <li>
+                    <code>vaccines</code>: integer
+                    <p>name of vaccine type</p>
+                </li>
+                <li>
+                    <code>description</code>: text
+                    <p>description of vaccine type</p>
+                </li>
+                <li>
+                    <code>benefits</code>: text
+                    <p>knows positive effects</p>
+                </li>
+                <li>
+                    <code>challanges</code>: text
+                    <p>knows downsides</p>
+                </li>
+                <li>
+                    <code>nr_doses_required</code>: integer
+                    <p>number of requiret shots for vaccine to be effective</p>
+                </li>
+
+                <li>
+                    <code>relatedVaccines</code>: object
+                    <ul>
+                        <li>
+                            <code>id</code>: integer
+                            <p>unique identifier</p>
+                        </li>
+                        <li>
+                            <code>name</code>: string
+                            <p>name of vaccine</p>
+                        </li>
+                        <li>
+                            <code>img</code>: string
+                            <p>image logo name of company</p>
+                        </li>
+                    </ul>
+
+                    <p>available vaccines for vaccine type</p>
+                </li>
+                <li>
+                    <code>otherUses</code>: object
+                    <ul>
+                        <li>
+                            <code>id</code>: integer
+                            <p>unique identifier</p>
+                        </li>
+                        <li>
+                            <code>name</code>: string
+                            <p>name of disease</p>
+                        </li>
+                    </ul>
+
+                    <p>other diseases the vaccine can be used for</p>
+                </li>
+            </ul>
+        </div>
+
+
+    </div>
+</body>
+
+</html>

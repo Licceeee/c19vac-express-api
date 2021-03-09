@@ -1,0 +1,10 @@
+code {
+    font-size: 1rem;
+    background-color: aliceblue;
+    /* padding: 6px;
+    border: 1px solid rgb(212, 211, 211); */
+}
+
+.request {
+    color: green;
+}
